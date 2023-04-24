@@ -1,6 +1,7 @@
 package webserver;
 
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class QueryParameter {
     }
 
     public static QueryParameter parse(String queryString) {
-        String decodedQueryString = URLDecoder.decode(queryString);
+        String decodedQueryString = URLDecoder.decode(queryString, StandardCharsets.UTF_8);
         String[] queryParams = decodedQueryString.split(QUERY_PARAMETER_SEPARATOR);
         ConcurrentHashMap<String, String> paramMap = Arrays.stream(queryParams)
             .map(keyValueString -> keyValueString.split(KEY_VALUE_SEPARATOR, 2))

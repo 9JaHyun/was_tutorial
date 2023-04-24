@@ -1,7 +1,5 @@
 package webserver;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -14,7 +12,7 @@ class QueryParameterTest {
 
         @DisplayName("완전하게 데이터가 존재하는 경우 성공한다.")
         @Test
-        void willSuccess(){
+        void willSuccess() {
             // given
             String request = "userId=userId1&password=password&name=username&email=email@google.com";
 
@@ -30,7 +28,7 @@ class QueryParameterTest {
 
         @DisplayName("UTF-8 디코딩에 성공한다.")
         @Test
-        void url_decoding_willSuccess(){
+        void url_decoding_willSuccess() {
             // given
             String request = "userId=%EC%95%84%EC%9D%B4%EB%94%98%EB%8D%B0%EC%9A%A91&password=password&name=%ED%95%9C%EA%B8%80%EC%9D%B4%EB%A6%84&email=email%40google.com";
 
@@ -45,7 +43,7 @@ class QueryParameterTest {
 
         @DisplayName("'='이 여러개 있는 경우 가장 앞의 것만 짤린다.")
         @Test
-        void only_first_equals_will_success(){
+        void only_first_equals_will_success() {
             // given
             String request = "userId=user=Id1&password=pa=s==s=word";
 
@@ -59,7 +57,7 @@ class QueryParameterTest {
 
         @DisplayName("빈 '&'의 경우 무시한다.")
         @Test
-        void empty_Ampersand_ignore_success(){
+        void empty_Ampersand_ignore_success() {
             // given
             String request = "userId=username1&&password=pw1";
 
