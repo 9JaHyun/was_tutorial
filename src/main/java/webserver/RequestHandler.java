@@ -1,8 +1,10 @@
 package webserver;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import org.slf4j.Logger;
@@ -10,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 class RequestHandler implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
     private Socket connection;
 
@@ -19,16 +21,19 @@ class RequestHandler implements Runnable {
     }
 
     public void run() {
-        logger.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
+        log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
             connection.getPort());
 
         try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            RequestLine parse = RequestLine.parse(br.readLine());
+            log.info("{}, {}, {}", parse.getHttpMethod(), parse.getUrl(), parse.getProtocol());
             DataOutputStream dos = new DataOutputStream(out);
-            byte[] body = "Hello Web Server".getBytes();
+            byte[] body = "Hello_Web_Server".getBytes();
             response200Header(dos, body.length);
             responseBody(dos, body);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -39,7 +44,7 @@ class RequestHandler implements Runnable {
             dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
             dos.writeBytes("\r\n");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -50,7 +55,7 @@ class RequestHandler implements Runnable {
             dos.writeBytes("\r\n");
             dos.flush();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }
